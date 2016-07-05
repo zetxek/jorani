@@ -53,9 +53,9 @@ class LeaveTypes extends CI_Controller {
         $this->load->library('form_validation');
         $data['title'] = lang('leavetypes_popup_create_title');
         $data['leavetypes'] = $this->types_model->getTypes();
-        
-        $this->form_validation->set_rules('name', lang('leavetypes_popup_create_field_name'), 'required|xss_clean|strip_tags');        
-        
+
+        $this->form_validation->set_rules('name', lang('leavetypes_popup_create_field_name'), 'required|xss_clean|strip_tags');
+
         if ($this->form_validation->run() === FALSE) {
             $this->load->view('leavetypes/create', $data);
         } else {
@@ -79,18 +79,19 @@ class LeaveTypes extends CI_Controller {
         $data['leavetypes'] = $this->types_model->getTypes();
         $data['id'] = $id;
         $data['type_name'] = $this->types_model->getName($id);
-        
-        $this->form_validation->set_rules('name', lang('leavetypes_popup_update_field_name'), 'required|xss_clean|strip_tags');        
-        
+        $data['type_color'] = $this->types_model->getColor($id);
+
+        $this->form_validation->set_rules('name', lang('leavetypes_popup_update_field_name'), 'required|xss_clean|strip_tags');
+
         if ($this->form_validation->run() === FALSE) {
             $this->load->view('leavetypes/edit', $data);
         } else {
-            $this->types_model->updateTypes($id, $this->input->post('name'));
+            $this->types_model->updateTypes($id, $this->input->post('name'), $this->input->post('color'));
             $this->session->set_flashdata('msg', lang('leavetypes_popup_update_flash_msg'));
             redirect('leavetypes');
         }
     }
-    
+
     /**
      * Action : delete a leave type
      * @param int $id leave type identifier

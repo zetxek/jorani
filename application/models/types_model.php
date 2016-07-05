@@ -47,20 +47,32 @@ class Types_model extends CI_Model {
         $type = $this->getTypes($id);
         return $type['name'];
     }
-    
+
+    /**
+     * Get the color of a given type id
+     * @param int $id ID of the type
+     * @return string label of the type
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function getColor($id) {
+        $type = $this->getTypes($id);
+        return $type['color'];
+    }
+
     /**
      * Insert a new leave type
      * @param string $name name of the type
      * @return int number of affected rows
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function setTypes($name) {
+    public function setTypes($name, $color = "") {
         $data = array(
-            'name' => $this->input->post('name')
+            'name' => $name,
+            'color' => $color
         );
         return $this->db->insert('types', $data);
     }
-    
+
     /**
      * Delete a leave type from the database
      * @param int $id identifier of the leave type
@@ -69,7 +81,7 @@ class Types_model extends CI_Model {
     public function deleteType($id) {
         $this->db->delete('types', array('id' => $id));
     }
-    
+
     /**
      * Update a given leave type in the database.
      * @param int $id identifier of the leave type
@@ -77,14 +89,15 @@ class Types_model extends CI_Model {
      * @return int number of affected rows
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function updateTypes($id, $name) {
+    public function updateTypes($id, $name, $color = "") {
         $data = array(
-            'name' => $name
+            'name' => $name,
+            'color' => $color
         );
         $this->db->where('id', $id);
         return $this->db->update('types', $data);
     }
-    
+
     /**
      * Count the number of time a leave type is used into the database
      * @param int $id identifier of the leave type record
@@ -98,7 +111,7 @@ class Types_model extends CI_Model {
         $result = $query->row_array();
         return $result['COUNT(*)'];
     }
-    
+
     /**
      * Create an arry containing the list of all existing leave types
      * Modify the name (key) of the compensate leave type name passed as parameter

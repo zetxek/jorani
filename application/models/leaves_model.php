@@ -561,17 +561,17 @@ class Leaves_model extends CI_Model {
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function individual($user_id, $start = "", $end = "") {
-        $this->db->select('leaves.*, types.name as type');
+        $this->db->select('leaves.*, types.name as type, types.color as color');
         $this->db->join('types', 'leaves.type = types.id');
         $this->db->where('employee', $user_id);
         $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
-        
+
         $jsonevents = array();
         foreach ($events as $entry) {
-            
+
             if ($entry->startdatetype == "Morning") {
                 $startdate = $entry->startdate . 'T07:00:00';
             } else {
@@ -596,15 +596,15 @@ class Leaves_model extends CI_Model {
                 $enddatetype = "Afternoon";
                 $allDay = TRUE;
             }
-            
+
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
                 case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
+                case 3: $color = $entry->color ? $entry->color : '#468847'; break;  // Accepted
                 case 4: $color = '#ff0000'; break;  // Rejected
             }
-            
+
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->type,
@@ -629,14 +629,17 @@ class Leaves_model extends CI_Model {
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function workmates($user_id, $start = "", $end = "") {
+        $this->db->select('leaves.*, users.*, types.name as type, types.color as color');
+
         $this->db->join('users', 'users.id = leaves.employee');
+        $this->db->join('types', 'leaves.type = types.id');
         $this->db->where('users.manager', $user_id);
         $this->db->where('leaves.status != ', 4);       //Exclude rejected requests
         $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
-        
+
         $jsonevents = array();
         foreach ($events as $entry) {
             if ($entry->startdatetype == "Morning") {
@@ -663,15 +666,15 @@ class Leaves_model extends CI_Model {
                 $enddatetype = "Afternoon";
                 $allDay = TRUE;
             }
-            
+
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
                 case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
+                case 3: $color = $entry->color ? $entry->color : '#468847'; break;  // Accepted
                 case 4: $color = '#ff0000'; break;  // Rejected
             }
-            
+
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,
@@ -729,15 +732,15 @@ class Leaves_model extends CI_Model {
                 $enddatetype = "Afternoon";
                 $allDay = TRUE;
             }
-            
+
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
                 case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
+                case 3: $color = '#123456'; break;  // Accepted
                 case 4: $color = '#ff0000'; break;  // Rejected
             }
-            
+
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,
@@ -763,7 +766,7 @@ class Leaves_model extends CI_Model {
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function department($entity_id, $start = "", $end = "", $children = FALSE) {
-        $this->db->select('users.firstname, users.lastname,  leaves.*, types.name as type');
+        $this->db->select('users.firstname, users.lastname,  leaves.*, types.name as type, types.color as color');
         $this->db->from('organization');
         $this->db->join('users', 'users.organization = organization.id');
         $this->db->join('leaves', 'leaves.employee  = users.id');
@@ -814,15 +817,15 @@ class Leaves_model extends CI_Model {
                 $enddatetype = "Afternoon";
                 $allDay = TRUE;
             }
-            
+
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
                 case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
+                case 3: $color = $entry->color ? $entry->color : '#468847'; break;  // Accepted
                 case 4: $color = '#ff0000'; break;  // Rejected
             }
-            
+
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,

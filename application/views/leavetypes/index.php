@@ -19,18 +19,22 @@
     <tr>
       <th><?php echo lang('leavetypes_type_thead_id');?></th>
       <th><?php echo lang('leavetypes_type_thead_name');?></th>
+      <th>Color</th>
     </tr>
   </thead>
   <tbody>
   <?php foreach ($leavetypes as $type) { ?>
     <tr>
-      <td><?php echo $type['id'] ?> &nbsp; 
+      <td><?php echo $type['id'] ?> &nbsp;
           <?php if ($type['id'] !=0 ) { ?>
           <a href="#" class="confirm-delete" data-id="<?php echo $type['id'];?>" title="<?php echo lang('leavetypes_type_thead_tip_delete');?>"><i class="icon-trash"></i></a></td>
           <?php } ?>
       <td>
           <a href="<?php echo base_url();?>leavetypes/edit/<?php echo $type['id'] ?>" data-target="#frmEditLeaveType" data-toggle="modal" title="<?php echo lang('leavetypes_type_thead_tip_edit');?>"><i class="icon-pencil"></i></a>
           &nbsp; <?php echo $type['name']; ?></td>
+      <td>
+        <?php echo $type['color']; ?>
+      </td>
     </tr>
   <?php } ?>
   <?php if (count($leavetypes) == 0) { ?>
