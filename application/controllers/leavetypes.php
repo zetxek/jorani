@@ -59,7 +59,7 @@ class LeaveTypes extends CI_Controller {
         if ($this->form_validation->run() === FALSE) {
             $this->load->view('leavetypes/create', $data);
         } else {
-            $this->types_model->setTypes($this->input->post('name'));
+            $this->types_model->setTypes($this->input->post('name'), $this->input->post('color'));
             $this->session->set_flashdata('msg', lang('leavetypes_popup_create_flash_msg'));
             redirect('leavetypes');
         }
