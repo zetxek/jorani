@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * This view allows an HR admin to edit a leave type.
  * @copyright  Copyright (c) 2014-2016 Benjamin BALET
@@ -14,7 +14,7 @@ echo form_open('leavetypes/edit/' . $id, $attributes); ?>
     <label for="name"><?php echo lang('leavetypes_popup_update_field_name');?></label>
     <input type="text" name="name" id="name" value="<?php echo $type_name; ?>" />
     <label for="color">Color</label>
-    <input type="text" name="color" id="color" value="<?php echo $type_color; ?>" />
+    <input type="color" name="color" id="color" value="<?php echo $type_color; ?>" />
 
     <br />
 </form>
