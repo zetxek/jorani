@@ -33,7 +33,10 @@
           <a href="<?php echo base_url();?>leavetypes/edit/<?php echo $type['id'] ?>" data-target="#frmEditLeaveType" data-toggle="modal" title="<?php echo lang('leavetypes_type_thead_tip_edit');?>"><i class="icon-pencil"></i></a>
           &nbsp; <?php echo $type['name']; ?></td>
       <td>
-        <?php echo $type['color']; ?>
+        <?php if ($type['color']){ ?>
+          <div style="background-color: <?php echo $type['color']; ?>">
+          <?php echo $type['color']; ?>
+        <?php } ?>
       </td>
     </tr>
   <?php } ?>
